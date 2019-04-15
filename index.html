@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Test task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      let params = {
+        lines: [
+          {
+            background: '#00F',
+            updateTime: 1000,
+            elements: [
+              {
+                background: 'black',
+                width: 25
+              },
+              {
+                background: 'red',
+                width: 50,
+              },
+              {
+                background: 'yellow',
+                width: 25,
+              }
+            ]
+          }
+        ]
+      }
+
+      //generates random value from 0 to 255 (rgb)
+      function generateColor(){
+        return Math.floor(Math.random() * 255);
+      }
+
+      function generateRow(){
+        let rowHeight = 100 / params.lines.length;
+        params.lines.forEach(el => {
+          let rowBackground = el.background;
+          //create row
+          let rowPattern = `<div class="row" style="display: flex; width: 100vw; height: ${rowHeight}vh; background: ${rowBackground}"></div>`
+          //print row to DOM
+          document.body.insertAdjacentHTML('afterbegin', rowPattern);
+
+          // string that will hold elements, ready to insert to DOM
+          let rowContent = '';
+          // looping throuth each element
+          el.elements.forEach(rowElement => {
+            let elementPattern = `<div class="row__inner" style="width: ${rowElement.width}%; background: ${rowElement.background}"></div>`
+            // save the result in string
+            rowContent += elementPattern;
+          })
+
+          let row = document.querySelector('.row');
+          // fill generated row with elements
+          row.innerHTML = rowContent;
+          
+          //get all rows
+          let allRows = row.querySelectorAll('.row__inner');
+          //convert HTML Collection to Array
+          let allRowsArr = Array.from(allRows);
+          //generate new bg color for each element
+          setInterval(() =>{
+              allRowsArr.forEach(rowEl => {
+              rowEl.style.background = `rgb(${generateColor()}, ${generateColor()}, ${generateColor()})`;
+            })
+          }, el.updateTime)
+          
+        })
+      }
+      generateRow();
+
+    </script>
+  </body>
+</html>
